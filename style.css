@@ -1,6 +1,8 @@
 * {
   box-sizing: border-box;
   padding: 0;
+  margin: 0;
+  outline: 0;
   font-family: monospace;
 }
 h1 {
@@ -11,15 +13,22 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 10px;
 }
-label {
+.season-average-wrapper button {
+  padding: 1rem;
   font-size: 1.5rem;
+  background-color: rgb(107, 175, 247);
+  border-radius: 20px;
+}
+.season-average-wrapper button:hover {
+  background-color: rgba(107, 175, 247, 0.405);
 }
 #stats {
   outline: none;
   padding: 1.5rem;
   font-size: 1.5rem;
-  text-align: center;
+  text-align: left;
   appearance: none;
   background-color: rgb(255, 226, 172);
   border: 2px solid black;
@@ -31,25 +40,14 @@ label {
   width: 100vw;
   justify-content: center;
 }
-.top-ten-players-wrapper ul {
-  border: 2px solid black;
-  border-radius: 20px;
-  width: 90%;
-  list-style: none;
-  display: none;
-  flex-direction: column;
-  max-height: 300px;
-  justify-content: center;
-  overflow: auto;
+.player-stats {
+  background-color: rgb(255, 255, 255);
+  border-collapse: collapse;
+  width: 80%;
+  height: auto;
+  text-align: left;
+  font-size: 1.2rem;
 }
-.top-ten-players-wrapper ul li {
-  color: white;
-  font-size: 1.5rem;
-  padding: 15px 20px 15px 20px;
-}
-li:nth-child(even) {
-  background-color: rgb(2, 102, 201);
-}
-li:nth-child(odd) {
-  background-color: dodgerblue;
+.player-stats th {
+  border-bottom: 1px solid grey;
 }
