@@ -1,5 +1,5 @@
 const SEASON_AVERAGE_BASE_URL =
-  "https://www.balldontlie.io/api/v1/season_averages";
+  "https://www.balldontlie.io/api/v1/season_averages?player_ids[]=1,2,3,4,5,6&season=2021";
 const PLAYERS_BASE_URL = "https://www.balldontlie.io/api/v1/players";
 
 // Write your code here.
@@ -16,8 +16,11 @@ function displayList() {
 }
 
 async function getPlayers() {
+  // const url = new URL(SEASON_AVERAGE_BASE_URL);
+  // url.searchParams.set("season", "2019");
+  // url.searchParams.set("players[]", "1,2,3,4");
   try {
-    const response = await fetch(PLAYERS_BASE_URL);
+    const response = await fetch(SEASON_AVERAGE_BASE_URL);
     const obj = await response.json();
     console.log(obj);
   } catch (error) {
