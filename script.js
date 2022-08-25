@@ -2,7 +2,8 @@
 
 const SEASON_AVERAGE_BASE_URL =
   "https://www.balldontlie.io/api/v1/season_averages";
-const PLAYERS_BASE_URL = "https://www.balldontlie.io/api/v1/players";
+const ALL_PLAYERS_BASE_URL = "https://www.balldontlie.io/api/v1/players";
+// const SPECIFIC_PLAYER_BASE_URL = "https://www.balldontlie.io/api/v1/players/";
 const TOTAL_PLAYERS = 3758;
 // Write your code here.
 const listOfPlayers = document.querySelector(".list-of-players");
@@ -17,11 +18,10 @@ function displayList() {
   }
 }
 
-async function getPlayerStats() {
+async function getPlayerStats(playerID, season = 2021) {
   const url = new URL(SEASON_AVERAGE_BASE_URL);
-  const player_ids = Array.from(Array(1200).keys());
-  url.searchParams.set("player_ids[]", player_ids.join(","));
-  url.searchParams.set("season", "2021");
+  url.searchParams.set("player_ids[]", playerID);
+  url.searchParams.set("season", `${season}`);
   try {
     const response = await fetch(url);
     const playerStats = await response.json();
@@ -31,16 +31,25 @@ async function getPlayerStats() {
   }
 }
 
-async function getAllPlayers(page) {
-  const playersUrl = new URL(PLAYERS_BASE_URL);
-  playersUrl.searchParams.set("page", `${page}`);
+async function getPlayersByNameAndID(playerName) {
+  const playersUrl = new URL(ALL_PLAYERS_BASE_URL);
+  playersUrl.searchParams.set("search", `${playerName}`);
   try {
     const response = await fetch(playersUrl);
     const players = await response.json();
-    return players;
+    const playersInfo = players.data.map((player) => {
+      return {
+        name: `${player.first_name} ${player.last_name}`,
+        id: player.id,
+      };
+    });
+    return playersInfo;
   } catch (error) {
     console.log("oops" + error);
   }
 }
 
-const playerStats = await getPlayerStats();
+const playersByNameAndID = await getPlayersByNameAndID("curry");
+console.log(playersByNameAndID);
+const playerStats = await getPlayerStats(playersByNameAndID[6].id);
+console.log(playerStats.data[0]["pts"]);
