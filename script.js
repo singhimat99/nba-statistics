@@ -4,9 +4,10 @@ const ALL_PLAYERS_BASE_URL = "https://www.balldontlie.io/api/v1/players";
 // const SPECIFIC_PLAYER_BASE_URL = "https://www.balldontlie.io/api/v1/players/";
 const TOTAL_PLAYERS = 3758;
 // Write your code here.
-const playerNameInput = document.getElementById("stats");
+const playerNameInput = document.getElementById("player-name");
 const getStatsButton = document.querySelector(".getStats");
-
+const statsBody = document.querySelector(".statsBody");
+const playerInfo = document.querySelectorAll(".info");
 getStatsButton.addEventListener("click", appendStats);
 
 async function getPlayerStats(playerID, season = 2021) {
@@ -29,13 +30,12 @@ async function getPlayersByName(playerName) {
   try {
     const response = await fetch(playersUrl);
     const players = await response.json();
-    const playersInfo = players.data.map((player) => {
+    return players.data.map((player) => {
       return {
         name: `${player.first_name} ${player.last_name}`,
         id: player.id,
       };
     });
-    return playersInfo;
   } catch (error) {
     console.log("oops" + error);
   }
@@ -50,14 +50,18 @@ async function validateInput(input) {
   if (players.length < 1) return false;
   return true;
 }
-// console.log(await validateInput("curry"));
-// const playerStats = await getPlayerStats(playersByName[6].id);
-// console.log(playerStats.data[0]["pts"]);
+console.log(await validateInput("Stephen curry"));
+const playerStats = await getPlayerStats(237);
+console.log(playerStats);
 
 async function appendStats() {
   // clear any stats already appended if true
-
+  statsBody.innerHTML = "";
+  playerInfo.forEach((element) => {
+    element.lastChild.remove();
+  });
   // disable button
+  getStatsButton.disabled = true;
 
   // validate input
   const input = playerNameInput.value;
@@ -69,4 +73,25 @@ async function appendStats() {
   const playerStats = await getPlayerStats(playerID);
 
   //append those stats to a fragement and then to the tr
+  const tr = document.createElement("tr");
+  tr.setAttribute("class", "statisticsRow");
+  const infoCategories = [playerName, "season", "games_played"];
+  const statCategories = ["pts", "ast", "reb", "stl", "blk"];
+  infoCategories.forEach((info, i) => {
+    const p = document.createElement("p");
+    if (i === 0) {
+      p.textContent = info;
+      playerInfo[i].appendChild(p);
+      return;
+    }
+    p.textContent = playerStats[info];
+    playerInfo[i].appendChild(p);
+  });
+  statCategories.forEach((category) => {
+    const td = document.createElement("td");
+    td.className = category;
+    td.textContent = playerStats[category];
+    tr.appendChild(td);
+  });
+  statsBody.appendChild(tr);
 }

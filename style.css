@@ -9,22 +9,23 @@ h1 {
   font-size: 3rem;
   text-align: center;
 }
-.season-average-wrapper {
+.player-name-input-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
+  margin-top: 10px;
 }
-.season-average-wrapper button {
+.player-name-input-wrapper button {
   padding: 1rem;
   font-size: 1.5rem;
   background-color: rgb(107, 175, 247);
   border-radius: 20px;
 }
-.season-average-wrapper button:hover {
+.player-name-input-wrapper button:hover {
   background-color: rgba(107, 175, 247, 0.405);
 }
-#stats {
+#player-name {
   outline: none;
   padding: 1.5rem;
   font-size: 1.5rem;
@@ -34,11 +35,13 @@ h1 {
   border: 2px solid black;
   border-radius: 20px;
 }
-.top-ten-players-wrapper {
+.player-stats-wrapper {
   display: flex;
+  flex-direction: column;
   margin-top: 20px;
   width: 100vw;
   justify-content: center;
+  align-items: center;
 }
 .player-stats {
   background-color: rgb(255, 255, 255);
@@ -50,4 +53,22 @@ h1 {
 }
 .player-stats th {
   border-bottom: 1px solid grey;
+  text-align: center;
+}
+.player-info {
+  display: flex;
+  font-size: 1.5rem;
+  justify-content: space-around;
+  width: 90vw;
+  margin-bottom: 10px;
+}
+.player-info h3 {
+  text-align: center;
+}
+.player-info p {
+  text-align: center;
+  font-size: 1.2rem;
+}
+.statsBody {
+  text-align: center;
 }

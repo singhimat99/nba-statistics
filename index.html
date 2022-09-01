@@ -10,33 +10,36 @@
   </head>
   <body>
     <header>
-      <h1>Your Favorite Players Stats</h1>
+      <h1>Your Favorite NBA Players Stats</h1>
     </header>
 
     <main>
-      <div class="season-average-wrapper">
-        <input type="text" id="stats" placeholder="NBA Player..."></input>
+      <div class="player-name-input-wrapper">
+        <input type="text" id="player-name" placeholder="NBA Player..."></input>
         <button class="getStats">Get Stats</button>
       </div>
-      <div class="top-ten-players-wrapper">
+      <div class="player-stats-wrapper">
+        <div class="player-info">
+          <div class="info">
+            <h3>Name:</h3>
+          </div>
+          <div class="info">
+            <h3>Season:</h3>
+          </div>
+          <div class="info">
+            <h3>Games:</h3>
+          </div>
+        </div>
         <table class="player-stats">
           <tr>
-            <th>Name</th>
-            <th>Season</th>
-            <th>Games</th>
             <th>PPG</th>
             <th>APG</th>
             <th>RPG</th>
+            <th>SPG</th>
+            <th>BPG</th>
           </tr>
-          <tbody>
-            <tr>
-              <td>LeBron James</td>
-              <td>2021</td>
-              <td>82</td>
-              <td>30.02</td>
-              <td>10.5</td>
-              <td>7.09</td>
-            </tr>
+          <tbody class="statsBody">
+            
           </tbody>
         </table>
       </div>
