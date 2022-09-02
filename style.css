@@ -5,10 +5,17 @@
   outline: 0;
   font-family: monospace;
 }
+/* body {
+  background: url(images/kobe.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover; 
+} */
 h1 {
   font-size: 3rem;
   text-align: center;
 }
+
+/* suggestions and button styles */
 .player-name-input-wrapper {
   display: flex;
   justify-content: center;
@@ -16,14 +23,41 @@ h1 {
   gap: 10px;
   margin-top: 10px;
 }
+.suggestions-list {
+  width: 100%;
+  list-style: none;
+  margin-top: 6px;
+  border-radius: 8px;
+  box-shadow: 0 5px 10px #4a494933;
+  max-height: 120px;
+  overflow: auto;
+}
+.suggestions-list li {
+  padding: 12px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.suggestions-list li:hover {
+  background-color: #569af4;
+}
+.suggestions-list li:not(:hover):nth-child(even) {
+  background-color: #e7e7e7;
+}
+.suggestions-list li:not(:hover):nth-child(odd) {
+  background-color: white;
+}
 .player-name-input-wrapper button {
   padding: 1rem;
   font-size: 1.5rem;
   background-color: rgb(107, 175, 247);
   border-radius: 20px;
+  align-self: flex-start;
+  transform: translateY(10px);
+  color: white;
 }
 .player-name-input-wrapper button:hover {
   background-color: rgba(107, 175, 247, 0.405);
+  color: darkblue;
 }
 #player-name {
   outline: none;
@@ -33,8 +67,21 @@ h1 {
   appearance: none;
   background-color: rgb(255, 226, 172);
   border: 2px solid black;
-  border-radius: 20px;
+  border-radius: 15px;
 }
+.season-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.4rem;
+  align-self: flex-start;
+}
+#season {
+  padding: 10px;
+  font-size: 1.3rem;
+  border-radius: 10px;
+}
+/* player stats styles */
 .player-stats-wrapper {
   display: flex;
   flex-direction: column;
@@ -51,9 +98,13 @@ h1 {
   text-align: left;
   font-size: 1.2rem;
 }
+
 .player-stats th {
+  padding: 1rem;
   border-bottom: 1px solid grey;
   text-align: center;
+  font-size: 2rem;
+  padding-bottom: 5px;
 }
 .player-info {
   display: flex;
@@ -62,13 +113,19 @@ h1 {
   width: 90vw;
   margin-bottom: 10px;
 }
+
+.player-info td {
+  font-size: 1.3rem;
+}
 .player-info h3 {
   text-align: center;
+  font-size: 2.5rem;
 }
 .player-info p {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.7rem;
 }
 .statsBody {
   text-align: center;
+  font-size: 1.5rem;
 }
