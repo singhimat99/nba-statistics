@@ -31,6 +31,8 @@ h1 {
   box-shadow: 0 5px 10px #4a494933;
   max-height: 120px;
   overflow: auto;
+  position: relative;
+  z-index: 1;
 }
 .suggestions-list li {
   padding: 12px;
@@ -128,4 +130,60 @@ h1 {
 .statsBody {
   text-align: center;
   font-size: 1.5rem;
+}
+
+/* styling for scrollable */
+.season-stats-wrapper {
+  width: 95vw;
+  border: 2px solid red;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  height: max(400px);
+}
+.button-wrapper {
+  align-self: flex-end;
+  width: 40%;
+  margin: 10px;
+}
+.getStats {
+  width: 100%;
+  font-size: 1.5rem;
+  padding: 10px;
+  border-radius: 30px;
+  background-color: rgb(250, 189, 109);
+}
+.getStats:hover {
+  background-color: rgba(250, 189, 109, 0.539);
+}
+.scrollable-wrapper {
+  border: 2px solid red;
+  overflow: auto;
+}
+.game {
+  padding: 1rem;
+  margin: 0.8rem;
+  border-radius: 10px;
+  background-color: rgb(41, 138, 249);
+  font-size: 1.8rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  color: black;
+}
+.game h5 {
+  color: rgb(174, 174, 174);
+  font-size: 0.8em;
+}
+.game p {
+  font-size: 0.7em;
+  background-color: rgb(127, 200, 255);
+  border-style: outset;
+  border-color: grey;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  text-align: center;
+  color: black;
 }

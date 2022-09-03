@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" type="module"></script>
-    <title>Search Glossary</title>
+    <title>NBA Player Statistics</title>
   </head>
   <body>
     <header>
@@ -14,7 +14,7 @@
     </header>
 
     <main>
-      <div class="player-name-input-wrapper">
+      <section class="player-name-input-wrapper">
         <div class="suggestions-wrapper">
           <input type="text" id="player-name" placeholder="NBA Player..."></input>
           <ul class="suggestions-list">
@@ -24,9 +24,9 @@
           <div>Season</div>
           <input type="number" min="1950" max="2021" step="1" value="2021" id="season"/>
         </div>
-        <button class="getStats">Get Stats</button>
-      </div>
-      <div class="player-stats-wrapper">
+        <button class="getAvgs">Get Season Avg</button>
+      </section>
+      <section class="player-stats-wrapper">
         <div class="player-info">
           <div class="info">
             <h3>Name:</h3>
@@ -50,7 +50,19 @@
             
           </tbody>
         </table>
-      </div>
+        <div class="season-stats-wrapper">
+          <div class="button-wrapper">
+            <button class="getStats">Get Season Stats</button>
+          </div>
+          <div class="scrollable-wrapper">
+            <div class="game">
+              <h4>Lebron James</h4>
+              <h5>Lakers vs Warriors</h5>
+              <p><b>30</b> Points <b>30</b> Rebounds <b>30</b> Assists <b>30</b> Steals <b>30</b> Blocks</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </body>
 </html>

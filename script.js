@@ -4,36 +4,37 @@ const ALL_PLAYERS_BASE_URL = "https://www.balldontlie.io/api/v1/players";
 const TOTAL_PLAYERS = 3758;
 let timeoutID;
 const playerNameInput = document.getElementById("player-name");
-const getStatsButton = document.querySelector(".getStats");
+const getAvgsButton = document.querySelector(".getAvgs");
 const statsBody = document.querySelector(".statsBody");
 const playerInfo = document.querySelectorAll(".info");
 const suggestionsList = document.querySelector(".suggestions-list");
 const season = document.getElementById("season");
 season.addEventListener("change", () => {
-  getStatsButton.disabled = false;
+  getAvgsButton.disabled = false;
 });
-getStatsButton.addEventListener("click", appendStats);
+getAvgsButton.addEventListener("click", appendStats);
+
+// SUGGESTIONS LIST
 playerNameInput.addEventListener("input", () => {
-  getStatsButton.disabled = false;
+  getAvgsButton.disabled = false;
   onType();
 });
 
-// SUGGESTIONS LIST
 function onType() {
-  if (playerNameInput.value.length === 0) {
+  if (playerNameInput.value.length < 3) {
     clearSuggestions();
     return;
   }
   clearTimeout(timeoutID);
-  timeoutID = setTimeout(fetchAndAppendSuggestions, 300);
+  timeoutID = setTimeout(fetchAndAppendSuggestions, 100);
 }
+
 async function fetchAndAppendSuggestions() {
   const players = await getPlayersByName(playerNameInput.value);
   const playerIDs = players.map((player) => {
     return player.id;
   });
   const suggestions = await filterBySeason(playerIDs.join(","));
-  // call get player stats with season of 2021, and it will return all the players
   const fragment = document.createDocumentFragment();
   suggestions.forEach((suggestion) => {
     fragment.appendChild(createSuggestionElement(suggestion));
@@ -42,7 +43,6 @@ async function fetchAndAppendSuggestions() {
 }
 
 async function filterBySeason(playerIDs) {
-  // should return an array of names of players that played in that season
   const filteredPlayersStats = await getPlayerStats(playerIDs, season.value);
   const filteredIDs = filteredPlayersStats.map((stateroos) => {
     return stateroos.player_id;
@@ -66,7 +66,6 @@ async function fetchPlayerNameByID(id) {
     console.log(`filter error: ${error}`);
   }
 }
-
 function createSuggestionElement(suggestion) {
   const li = document.createElement("li");
   li.textContent = suggestion;
@@ -80,7 +79,8 @@ function clearSuggestions() {
   clearTimeout(timeoutID);
   suggestionsList.innerHTML = "";
 }
-// CODE TO GET PLAYERS STATS
+
+// GET AND APPEND PLAYERS STATS
 async function getPlayerStats(playerID, season = 2021) {
   const url = new URL(SEASON_AVERAGE_BASE_URL);
   url.searchParams.set("player_ids[]", playerID);
@@ -88,12 +88,12 @@ async function getPlayerStats(playerID, season = 2021) {
   try {
     const response = await fetch(url);
     const playerStats = await response.json();
-    return playerStats.data; // normal is an object with a data array
+    return playerStats.data;
   } catch (error) {
     console.error("oh no: " + error);
   }
 }
-// returns array of objects with that name plsu their IDs
+
 async function getPlayersByName(playerName) {
   const playersUrl = new URL(ALL_PLAYERS_BASE_URL);
   playersUrl.searchParams.set("search", `${playerName}`);
@@ -120,34 +120,30 @@ async function validateInput(input) {
   if (players.length < 1) return false;
   return true;
 }
-// console.log(await validateInput("lebron James"));
-// const playerStats = await getPlayerStats("233,237");
-// console.log(playerStats);
 
 async function appendStats() {
-  // clear any stats already appended if true
   statsBody.innerHTML = "";
+
   playerInfo.forEach((element) => {
     if (element.children.length < 2) return;
     element.lastChild.remove();
   });
-  // disable button
-  getStatsButton.disabled = true;
 
-  // validate input
+  getAvgsButton.disabled = true;
+
   const input = playerNameInput.value;
   if ((await validateInput(input)) === false) return;
 
-  // get stats of player requested
   const player = await getPlayersByName(input);
   const { name: playerName, id: playerID } = player[0];
   const playerStats = await getPlayerStats(playerID, season.value);
 
-  //append those stats to a fragement and then to the tr
-  const tr = document.createElement("tr");
-  tr.setAttribute("class", "statisticsRow");
   const infoCategories = [playerName, "season", "games_played"];
   const statCategories = ["pts", "ast", "reb", "stl", "blk"];
+
+  const tr = document.createElement("tr");
+  tr.setAttribute("class", "statisticsRow");
+
   infoCategories.forEach((info, i) => {
     const p = document.createElement("p");
     if (i === 0) {
@@ -158,11 +154,15 @@ async function appendStats() {
     p.textContent = playerStats[0][info];
     playerInfo[i].appendChild(p);
   });
+
   statCategories.forEach((category) => {
     const td = document.createElement("td");
     td.className = category;
     td.textContent = playerStats[0][category];
     tr.appendChild(td);
   });
+
   statsBody.appendChild(tr);
 }
+
+//
