@@ -9,6 +9,8 @@ const statsBody = document.querySelector(".statsBody");
 const playerInfo = document.querySelectorAll(".info");
 const suggestionsList = document.querySelector(".suggestions-list");
 const season = document.getElementById("season");
+let currentPlayerID = 0;
+let currentPlayerName = null;
 season.addEventListener("change", () => {
   getAvgsButton.disabled = false;
 });
@@ -25,6 +27,7 @@ function onType() {
     clearSuggestions();
     return;
   }
+  console.log(currentPlayerID, currentPlayerName);
   clearTimeout(timeoutID);
   timeoutID = setTimeout(fetchAndAppendSuggestions, 100);
 }
@@ -78,6 +81,8 @@ function createSuggestionElement(suggestion) {
 function clearSuggestions() {
   clearTimeout(timeoutID);
   suggestionsList.innerHTML = "";
+  currentPlayerID = 0;
+  currentPlayerName = null;
 }
 
 // GET AND APPEND PLAYERS STATS
@@ -136,6 +141,8 @@ async function appendStats() {
 
   const player = await getPlayersByName(input);
   const { name: playerName, id: playerID } = player[0];
+  currentPlayerID = playerID;
+  currentPlayerName = playerName;
   const playerStats = await getPlayerStats(playerID, season.value);
 
   const infoCategories = [playerName, "season", "games_played"];
@@ -163,6 +170,18 @@ async function appendStats() {
   });
 
   statsBody.appendChild(tr);
+  console.log(currentPlayerID, currentPlayerName);
 }
 
-//
+// APPEND SEASON STATS
+
+/* <div class="game">
+  <h4>Lebron James</h4>
+  <h5>Lakers vs Warriors</h5>
+  <p><b>30</b> Points <b>30</b> Rebounds <b>30</b> Assists <b>30</b> Steals <b>30</b> Blocks</p>
+</div> */
+
+function clearSeasonStats() {}
+
+async function getGamesByPlayerID(id) {}
+console.log(currentPlayerID, currentPlayerName);
