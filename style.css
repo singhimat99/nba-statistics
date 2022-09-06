@@ -14,6 +14,7 @@ body {
   /* background: linear-gradient(var(--deep-blue), var(--greyish-white)); */
   background-color: var(--deep-blue);
   border: 3px solid var(--deep-yellow);
+  height: min(150vh);
   box-shadow: 0 0 0 4px var(--deep-red) inset,
     0 0 0 7px var(--deep-yellow) inset;
 }
@@ -153,7 +154,9 @@ header {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  height: max(400px);
+  height: max(500px);
+  justify-content: center;
+  align-items: center;
 }
 .button-wrapper {
   align-self: flex-end;
@@ -167,6 +170,8 @@ header {
   border-radius: 30px;
   background-color: var(--deep-red);
   color: var(--deep-yellow);
+  display: flex;
+  justify-content: center;
 }
 .getStats:hover {
   background-color: var(--deep-yellow);
@@ -174,10 +179,22 @@ header {
 }
 .scrollable-wrapper {
   overflow: auto;
+  width: 90%;
+  margin-bottom: 15px;
+  height: min(450px);
+}
+.header {
+  height: min(30px);
+  margin-bottom: 20px;
+}
+.header h4 {
+  font-size: 2rem;
+  text-shadow: 1px 1px 0 white;
+  display: flex;
 }
 .game {
   padding: 1rem;
-  margin: 0.8rem;
+  margin: 0.5rem;
   border-radius: 10px;
   background-color: var(--deep-yellow);
   font-size: 1.8rem;
@@ -187,12 +204,9 @@ header {
   align-items: center;
   color: black;
 }
-.game h4 {
-  text-shadow: 2px 2px 0 var(--deep-blue);
-}
 .game h5 {
   color: var(--deep-blue);
-  font-size: 0.8em;
+  font-size: 0.9em;
   text-shadow: 2px 2px 0 white;
 }
 .game p {

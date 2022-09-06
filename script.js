@@ -1,28 +1,41 @@
 const SEASON_AVERAGE_BASE_URL =
   "https://www.balldontlie.io/api/v1/season_averages";
 const ALL_PLAYERS_BASE_URL = "https://www.balldontlie.io/api/v1/players";
+const ALL_SEASON_STATS_BASE_URL = "https://www.balldontlie.io/api/v1/stats";
+const TEAMS_BASE_URL = "https://www.balldontlie.io/api/v1/teams";
 const TOTAL_PLAYERS = 3758;
 let timeoutID;
 const playerNameInput = document.getElementById("player-name");
-const getAvgsButton = document.querySelector(".getAvgs");
-const statsBody = document.querySelector(".statsBody");
-const playerInfo = document.querySelectorAll(".info");
 const suggestionsList = document.querySelector(".suggestions-list");
-const gamesWrapper = document.querySelector(".scrollable-wrapper");
-const season = document.getElementById("season");
+const getAvgsButton = document.querySelector(".getAvgs");
+const playerInfo = document.querySelectorAll(".info");
+const statsBody = document.querySelector(".statsBody");
 let currentPlayerID = 0;
 let currentPlayerName = null;
+const season = document.getElementById("season");
+const getStatsButton = document.querySelector(".getStats");
+const gamesWrapper = document.querySelector(".scrollable-wrapper");
+const seasonStatsWrapper = document.querySelector(".season-stats-wrapper");
+const headingWrapper = document.querySelector(".header");
+
+getStatsButton.addEventListener("click", () => {
+  appendGames();
+});
 season.addEventListener("change", () => {
   getAvgsButton.disabled = false;
   getAvgsButton.style.filter = "brightness(100%)";
+  hideSeasonAndResetStats();
 });
-getAvgsButton.addEventListener("click", appendStats);
+getAvgsButton.addEventListener("click", () => {
+  appendStats();
+});
 
 // SUGGESTIONS LIST
 playerNameInput.addEventListener("input", () => {
   getAvgsButton.disabled = false;
   getAvgsButton.style.filter = "brightness(100%)";
   onType();
+  hideSeasonAndResetStats();
 });
 
 function onType() {
@@ -143,6 +156,8 @@ async function appendStats() {
   const input = playerNameInput.value;
   if ((await validateInput(input)) === false) return;
 
+  displaySeasonStats();
+
   const player = await getPlayersByName(input);
   const { name: playerName, id: playerID } = player[0];
   currentPlayerID = playerID;
@@ -185,25 +200,74 @@ async function appendStats() {
     <p><b>30</b> Points <b>30</b> Rebounds <b>30</b> Assists <b>30</b> Steals <b>30</b> Blocks</p>
   </div> */
 
-function clearSeasonStats() {}
-
-async function getGamesByPlayerID(id) {}
-console.log(currentPlayerID, currentPlayerName);
-
-async function fetchAndAppendGames(games) {
-  const fragment = document.createDocumentFragment;
+async function appendGames() {
   const gamesSeason = season.value;
+  const { data: games, meta } = await fetchAllGamesBySeason(
+    currentPlayerID,
+    gamesSeason
+  );
+  const teams = await getAllTeams();
   const playerName = playerNameInput.value;
+  const playerHeader = document.createElement("h4");
+  playerHeader.textContent = `${playerName} ${gamesSeason} Season Stats`;
+  headingWrapper.appendChild(playerHeader);
+  const fragment = document.createDocumentFragment();
   games.forEach((game) => {
-    fragment.appendChild(createGameElement(game));
+    fragment.appendChild(createGameElement(game, teams));
   });
   gamesWrapper.appendChild(fragment);
 }
-function createGameElement(game) {
-  const gameWrapper = document.createElement("div").classList.add("game");
-  const nameHeading = document.createElement("h4");
-  nameHeading.textContent = playerNameInput.value;
-  const versusHeading = document.createElement("h5");
-  const statsDisplay = document.createElement("p");
+async function fetchAllGamesBySeason(playerID, currentSeason) {
+  const url = new URL(ALL_SEASON_STATS_BASE_URL);
+  url.searchParams.set("seasons", currentSeason);
+  url.searchParams.set("player_ids", playerID);
+  try {
+    const response = await fetch(url);
+    const allGames = await response.json();
+    return allGames;
+  } catch (error) {
+    console.error("error alert" + error);
+  }
 }
-createGameElement(1);
+
+// const { data: games, meta } = await fetchAllGamesBySeason(237, 2018);
+// console.log(games);
+// console.log(meta);
+function createGameElement(game, teams) {
+  const gameWrapper = document.createElement("div");
+  gameWrapper.classList.add("game");
+  const versusHeading = document.createElement("h5");
+  versusHeading.textContent = `${
+    game.game.home_team_id === game.team.id ? "VS" : "@"
+  } ${
+    game.game.home_team_id === game.team.id
+      ? teams[game.game.visitor_team_id - 1]
+      : teams[game.game.home_team_id - 1]
+  }`;
+  const statsDisplay = document.createElement("p");
+  statsDisplay.innerHTML = `<b>${game.pts}</b> Points <b>${game.reb}</b> Rebounds <b>${game.ast}</b> Assists <b>${game.stl}</b> Steals <b>${game.blk}</b> Blocks`;
+  gameWrapper.appendChild(versusHeading);
+  gameWrapper.appendChild(statsDisplay);
+  return gameWrapper;
+}
+async function getAllTeams() {
+  try {
+    const response = await fetch(TEAMS_BASE_URL);
+    const teamsData = await response.json();
+    return teamsData.data.map((team) => {
+      return team["full_name"];
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+const teameroor = await getAllTeams();
+console.log(teameroor);
+function hideSeasonAndResetStats() {
+  seasonStatsWrapper.style.display = "none";
+  gamesWrapper.innerHTML = "";
+  headingWrapper.innerHTML = "";
+}
+function displaySeasonStats() {
+  seasonStatsWrapper.style.display = "flex";
+}
