@@ -8,17 +8,20 @@ const getAvgsButton = document.querySelector(".getAvgs");
 const statsBody = document.querySelector(".statsBody");
 const playerInfo = document.querySelectorAll(".info");
 const suggestionsList = document.querySelector(".suggestions-list");
+const gamesWrapper = document.querySelector(".scrollable-wrapper");
 const season = document.getElementById("season");
 let currentPlayerID = 0;
 let currentPlayerName = null;
 season.addEventListener("change", () => {
   getAvgsButton.disabled = false;
+  getAvgsButton.style.filter = "brightness(100%)";
 });
 getAvgsButton.addEventListener("click", appendStats);
 
 // SUGGESTIONS LIST
 playerNameInput.addEventListener("input", () => {
   getAvgsButton.disabled = false;
+  getAvgsButton.style.filter = "brightness(100%)";
   onType();
 });
 
@@ -135,6 +138,7 @@ async function appendStats() {
   });
 
   getAvgsButton.disabled = true;
+  getAvgsButton.style.filter = "brightness(45%)";
 
   const input = playerNameInput.value;
   if ((await validateInput(input)) === false) return;
@@ -176,12 +180,30 @@ async function appendStats() {
 // APPEND SEASON STATS
 
 /* <div class="game">
-  <h4>Lebron James</h4>
-  <h5>Lakers vs Warriors</h5>
-  <p><b>30</b> Points <b>30</b> Rebounds <b>30</b> Assists <b>30</b> Steals <b>30</b> Blocks</p>
-</div> */
+    <h4>Lebron James</h4>
+    <h5>Lakers vs Warriors</h5>
+    <p><b>30</b> Points <b>30</b> Rebounds <b>30</b> Assists <b>30</b> Steals <b>30</b> Blocks</p>
+  </div> */
 
 function clearSeasonStats() {}
 
 async function getGamesByPlayerID(id) {}
 console.log(currentPlayerID, currentPlayerName);
+
+async function fetchAndAppendGames(games) {
+  const fragment = document.createDocumentFragment;
+  const gamesSeason = season.value;
+  const playerName = playerNameInput.value;
+  games.forEach((game) => {
+    fragment.appendChild(createGameElement(game));
+  });
+  gamesWrapper.appendChild(fragment);
+}
+function createGameElement(game) {
+  const gameWrapper = document.createElement("div").classList.add("game");
+  const nameHeading = document.createElement("h4");
+  nameHeading.textContent = playerNameInput.value;
+  const versusHeading = document.createElement("h5");
+  const statsDisplay = document.createElement("p");
+}
+createGameElement(1);

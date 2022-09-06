@@ -3,16 +3,26 @@
   padding: 0;
   margin: 0;
   outline: 0;
-  font-family: monospace;
+  font-family: "Alegreya Sans SC", sans-serif;
+  --deep-red: #c20d29;
+  --deep-blue: #173a83;
+  --deep-yellow: #feca0a;
+  --greyish-white: #cdd1db;
+  color: var(--deep-red);
 }
-/* body {
-  background: url(images/kobe.jpeg);
-  background-repeat: no-repeat;
-  background-size: cover; 
-} */
+body {
+  /* background: linear-gradient(var(--deep-blue), var(--greyish-white)); */
+  background-color: var(--deep-blue);
+  border: 3px solid var(--deep-yellow);
+  box-shadow: 0 0 0 4px var(--deep-red) inset,
+    0 0 0 7px var(--deep-yellow) inset;
+}
 h1 {
   font-size: 3rem;
   text-align: center;
+  margin: 5px;
+  color: var(--deep-red);
+  text-shadow: 2px 2px 0 white;
 }
 
 /* suggestions and button styles */
@@ -22,6 +32,16 @@ h1 {
   align-items: center;
   gap: 10px;
   margin-top: 10px;
+}
+header {
+  width: 95vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 25px;
+  margin-top: 25px;
+  border-radius: 10px;
+  /* box-shadow: 0 0 0 4px var(--deep-red), 0 0 0 7px var(--deep-yellow); */
 }
 .suggestions-list {
   width: 100%;
@@ -51,15 +71,15 @@ h1 {
 .player-name-input-wrapper button {
   padding: 1rem;
   font-size: 1.5rem;
-  background-color: rgb(107, 175, 247);
+  background-color: var(--deep-red);
   border-radius: 20px;
   align-self: flex-start;
   transform: translateY(10px);
-  color: white;
+  color: var(--deep-yellow);
 }
 .player-name-input-wrapper button:hover {
-  background-color: rgba(107, 175, 247, 0.405);
-  color: darkblue;
+  background-color: var(--deep-yellow);
+  color: var(--deep-red);
 }
 #player-name {
   outline: none;
@@ -67,8 +87,7 @@ h1 {
   font-size: 1.5rem;
   text-align: left;
   appearance: none;
-  background-color: rgb(255, 226, 172);
-  border: 2px solid black;
+  background-color: var(--deep-yellow);
   border-radius: 15px;
 }
 .season-wrapper {
@@ -93,17 +112,14 @@ h1 {
   align-items: center;
 }
 .player-stats {
-  background-color: rgb(255, 255, 255);
   border-collapse: collapse;
   width: 80%;
   height: auto;
   text-align: left;
   font-size: 1.2rem;
 }
-
 .player-stats th {
   padding: 1rem;
-  border-bottom: 1px solid grey;
   text-align: center;
   font-size: 2rem;
   padding-bottom: 5px;
@@ -115,7 +131,6 @@ h1 {
   width: 90vw;
   margin-bottom: 10px;
 }
-
 .player-info td {
   font-size: 1.3rem;
 }
@@ -135,7 +150,6 @@ h1 {
 /* styling for scrollable */
 .season-stats-wrapper {
   width: 95vw;
-  border: 2px solid red;
   display: flex;
   flex-direction: column;
   margin-top: 20px;
@@ -151,20 +165,21 @@ h1 {
   font-size: 1.5rem;
   padding: 10px;
   border-radius: 30px;
-  background-color: rgb(250, 189, 109);
+  background-color: var(--deep-red);
+  color: var(--deep-yellow);
 }
 .getStats:hover {
-  background-color: rgba(250, 189, 109, 0.539);
+  background-color: var(--deep-yellow);
+  color: var(--deep-red);
 }
 .scrollable-wrapper {
-  border: 2px solid red;
   overflow: auto;
 }
 .game {
   padding: 1rem;
   margin: 0.8rem;
   border-radius: 10px;
-  background-color: rgb(41, 138, 249);
+  background-color: var(--deep-yellow);
   font-size: 1.8rem;
   display: flex;
   justify-content: center;
@@ -172,18 +187,25 @@ h1 {
   align-items: center;
   color: black;
 }
+.game h4 {
+  text-shadow: 2px 2px 0 var(--deep-blue);
+}
 .game h5 {
-  color: rgb(174, 174, 174);
+  color: var(--deep-blue);
   font-size: 0.8em;
+  text-shadow: 2px 2px 0 white;
 }
 .game p {
   font-size: 0.7em;
-  background-color: rgb(127, 200, 255);
+  background-color: var(--greyish-white);
   border-style: outset;
   border-color: grey;
   padding: 10px;
   margin: 5px;
   border-radius: 8px;
   text-align: center;
-  color: black;
+  color: var(--deep-blue);
+}
+.game p b {
+  text-shadow: 1px 1px 0 white;
 }
