@@ -14,7 +14,7 @@ body {
   /* background: linear-gradient(var(--deep-blue), var(--greyish-white)); */
   background-color: var(--deep-blue);
   border: 3px solid var(--deep-yellow);
-  height: min(150vh);
+  height: 200vh;
   box-shadow: 0 0 0 4px var(--deep-red) inset,
     0 0 0 7px var(--deep-yellow) inset;
 }
@@ -103,6 +103,17 @@ header {
   font-size: 1.3rem;
   border-radius: 10px;
 }
+@media (max-width: 650px) {
+  .player-name-input-wrapper {
+    flex-direction: column;
+  }
+  .player-name-input-wrapper button {
+    align-self: center;
+  }
+  .season-wrapper {
+    align-self: center;
+  }
+}
 /* player stats styles */
 .player-stats-wrapper {
   display: flex;
@@ -151,7 +162,7 @@ header {
 /* styling for scrollable */
 .season-stats-wrapper {
   width: 95vw;
-  display: flex;
+  display: none;
   flex-direction: column;
   margin-top: 20px;
   height: max(500px);
@@ -181,7 +192,7 @@ header {
   overflow: auto;
   width: 90%;
   margin-bottom: 15px;
-  height: min(450px);
+  height: 500px;
 }
 .header {
   height: min(30px);
@@ -211,6 +222,7 @@ header {
 }
 .game p {
   font-size: 0.7em;
+  width: 85%;
   background-color: var(--greyish-white);
   border-style: outset;
   border-color: grey;

@@ -12,6 +12,8 @@ const playerInfo = document.querySelectorAll(".info");
 const statsBody = document.querySelector(".statsBody");
 let currentPlayerID = 0;
 let currentPlayerName = null;
+let page = 1;
+let canFetch = true;
 const season = document.getElementById("season");
 const getStatsButton = document.querySelector(".getStats");
 const gamesWrapper = document.querySelector(".scrollable-wrapper");
@@ -19,11 +21,15 @@ const seasonStatsWrapper = document.querySelector(".season-stats-wrapper");
 const headingWrapper = document.querySelector(".header");
 
 getStatsButton.addEventListener("click", () => {
+  gamesWrapper.innerHTML = "";
+  headingWrapper.innerHTML = "";
   appendGames();
 });
+gamesWrapper.addEventListener("scroll", handleScroll);
 season.addEventListener("change", () => {
   getAvgsButton.disabled = false;
   getAvgsButton.style.filter = "brightness(100%)";
+  page = 1;
   hideSeasonAndResetStats();
 });
 getAvgsButton.addEventListener("click", () => {
@@ -34,6 +40,7 @@ getAvgsButton.addEventListener("click", () => {
 playerNameInput.addEventListener("input", () => {
   getAvgsButton.disabled = false;
   getAvgsButton.style.filter = "brightness(100%)";
+  page = 1;
   onType();
   hideSeasonAndResetStats();
 });
@@ -43,7 +50,6 @@ function onType() {
     clearSuggestions();
     return;
   }
-  console.log(currentPlayerID, currentPlayerName);
   clearTimeout(timeoutID);
   timeoutID = setTimeout(fetchAndAppendSuggestions, 100);
 }
@@ -164,6 +170,12 @@ async function appendStats() {
   currentPlayerName = playerName;
   const playerStats = await getPlayerStats(playerID, season.value);
 
+  if (playerStats.length < 1) {
+    alert("Please enter a Valid Player or Season");
+    clearSuggestions();
+    return;
+  }
+
   const infoCategories = [playerName, "season", "games_played"];
   const statCategories = ["pts", "ast", "reb", "stl", "blk"];
 
@@ -189,7 +201,6 @@ async function appendStats() {
   });
 
   statsBody.appendChild(tr);
-  console.log(currentPlayerID, currentPlayerName);
 }
 
 // APPEND SEASON STATS
@@ -204,23 +215,34 @@ async function appendGames() {
   const gamesSeason = season.value;
   const { data: games, meta } = await fetchAllGamesBySeason(
     currentPlayerID,
-    gamesSeason
+    gamesSeason,
+    page
   );
+  if (meta.next_page == null) canFetch = false;
   const teams = await getAllTeams();
   const playerName = playerNameInput.value;
-  const playerHeader = document.createElement("h4");
-  playerHeader.textContent = `${playerName} ${gamesSeason} Season Stats`;
-  headingWrapper.appendChild(playerHeader);
+  if (headingWrapper.hasChildNodes() === false) {
+    const playerHeader = document.createElement("h4");
+    playerHeader.textContent = `${playerName} ${gamesSeason} Season Stats`;
+    headingWrapper.appendChild(playerHeader);
+  }
   const fragment = document.createDocumentFragment();
   games.forEach((game) => {
+    if (
+      game.pts == null ||
+      game.reb == null ||
+      game.ast == null ||
+      game.stl == null ||
+      game.blk == null
+    )
+      return;
     fragment.appendChild(createGameElement(game, teams));
   });
   gamesWrapper.appendChild(fragment);
 }
-async function fetchAllGamesBySeason(playerID, currentSeason) {
-  const url = new URL(ALL_SEASON_STATS_BASE_URL);
-  url.searchParams.set("seasons", currentSeason);
-  url.searchParams.set("player_ids", playerID);
+
+async function fetchAllGamesBySeason(playerID, currentSeason, page = 1) {
+  const url = createUrl(playerID, currentSeason, page);
   try {
     const response = await fetch(url);
     const allGames = await response.json();
@@ -229,14 +251,29 @@ async function fetchAllGamesBySeason(playerID, currentSeason) {
     console.error("error alert" + error);
   }
 }
-
-// const { data: games, meta } = await fetchAllGamesBySeason(237, 2018);
-// console.log(games);
+function handleScroll() {
+  if (!canFetch) return;
+  const spaceLeftAtBottom =
+    this.scrollHeight - this.scrollTop - this.clientHeight;
+  if (spaceLeftAtBottom > 0) return;
+  page += 1;
+  appendGames();
+}
+function createUrl(playerID, currentSeason, page) {
+  const url = new URL(ALL_SEASON_STATS_BASE_URL);
+  url.searchParams.set("player_ids[]", playerID);
+  url.searchParams.set("seasons[]", currentSeason);
+  url.searchParams.set("page", page);
+  return url;
+}
+// const { data: games, meta } = await fetchAllGamesBySeason(237, 2021);
+// console.log(games[0]);
 // console.log(meta);
 function createGameElement(game, teams) {
   const gameWrapper = document.createElement("div");
   gameWrapper.classList.add("game");
   const versusHeading = document.createElement("h5");
+
   versusHeading.textContent = `${
     game.game.home_team_id === game.team.id ? "VS" : "@"
   } ${
