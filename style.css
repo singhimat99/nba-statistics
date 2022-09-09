@@ -99,17 +99,6 @@ h1 {
   font-size: 1.3rem;
   border-radius: 10px;
 }
-@media (max-width: 650px) {
-  .player-name-input-wrapper {
-    flex-direction: column;
-  }
-  .player-name-input-wrapper button {
-    align-self: center;
-  }
-  .season-wrapper {
-    align-self: center;
-  }
-}
 /* player stats styles */
 .player-stats-wrapper {
   display: flex;
@@ -119,40 +108,38 @@ h1 {
   justify-content: center;
   align-items: center;
 }
+.player-info {
+  display: flex;
+  justify-content: space-around;
+  width: 90vw;
+  margin-bottom: 10px;
+  font-size: 2.5rem;
+}
+
+.player-info h3 {
+  text-align: center;
+  font-size: 1em;
+}
+.player-info p {
+  text-align: center;
+  font-size: 0.7em;
+}
 .player-stats {
   border-collapse: collapse;
   width: 80%;
   height: auto;
   text-align: left;
-  font-size: 1.2rem;
+  font-size: 2rem;
 }
 .player-stats th {
   padding: 1rem;
   text-align: center;
-  font-size: 2rem;
+  font-size: 1em;
   padding-bottom: 5px;
-}
-.player-info {
-  display: flex;
-  font-size: 1.5rem;
-  justify-content: space-around;
-  width: 90vw;
-  margin-bottom: 10px;
-}
-.player-info td {
-  font-size: 1.3rem;
-}
-.player-info h3 {
-  text-align: center;
-  font-size: 2.5rem;
-}
-.player-info p {
-  text-align: center;
-  font-size: 1.7rem;
 }
 .statsBody {
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 0.75em;
 }
 
 /* styling for scrollable */
@@ -230,4 +217,39 @@ h1 {
 }
 .game p b {
   text-shadow: 1px 1px 0 white;
+}
+
+@media (max-width: 650px) {
+  .player-name-input-wrapper {
+    flex-direction: column;
+  }
+  .player-name-input-wrapper button {
+    align-self: center;
+  }
+  .season-wrapper {
+    align-self: center;
+  }
+  .header h4 {
+    font-size: 1.8rem;
+  }
+  .game {
+    font-size: 1.5rem;
+  }
+}
+@media (max-width: 550px) {
+  .player-info {
+    font-size: 1.5rem;
+  }
+  .player-stats {
+    font-size: 1.2rem;
+  }
+  .button-wrapper {
+    width: 60%;
+  }
+  .header h4 {
+    font-size: 1.3rem;
+  }
+  .game {
+    font-size: 1rem;
+  }
 }
