@@ -3,17 +3,19 @@ const SEASON_AVERAGE_BASE_URL =
 const ALL_PLAYERS_BASE_URL = "https://www.balldontlie.io/api/v1/players";
 const ALL_SEASON_STATS_BASE_URL = "https://www.balldontlie.io/api/v1/stats";
 const TEAMS_BASE_URL = "https://www.balldontlie.io/api/v1/teams";
-const TOTAL_PLAYERS = 3758;
-let timeoutID;
+
 const playerNameInput = document.getElementById("player-name");
 const suggestionsList = document.querySelector(".suggestions-list");
 const getAvgsButton = document.querySelector(".getAvgs");
 const playerInfo = document.querySelectorAll(".info");
 const statsBody = document.querySelector(".statsBody");
+
+let timeoutID;
 let currentPlayerID = 0;
 let currentPlayerName = null;
 let page = 1;
 let canFetch = true;
+
 const season = document.getElementById("season");
 const getStatsButton = document.querySelector(".getStats");
 const gamesWrapper = document.querySelector(".scrollable-wrapper");
