@@ -15,6 +15,7 @@ let currentPlayerID = 0;
 let currentPlayerName = null;
 let page = 1;
 let canFetch = true;
+const playerNamesByID = {};
 
 const season = document.getElementById("season");
 const getStatsButton = document.querySelector(".getStats");
@@ -84,7 +85,13 @@ async function filterBySeason(playerIDs) {
   });
   const filteredPlayersNames = [];
   for (let i = 0; i < filteredIDs.length; i++) {
+    if (playerNamesByID.hasOwnProperty(filteredIDs[i]) === true) {
+      filteredPlayersNames.push(playerNamesByID[filteredIDs[i]]);
+      continue;
+    }
+
     const name = await fetchPlayerNameByID(filteredIDs[i]);
+    playerNamesByID[filteredIDs[i]] = name;
     filteredPlayersNames.push(name);
   }
   return filteredPlayersNames;
