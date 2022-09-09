@@ -11,28 +11,11 @@
   color: var(--deep-red);
 }
 body {
-  /* background: linear-gradient(var(--deep-blue), var(--greyish-white)); */
   background-color: var(--deep-blue);
   border: 3px solid var(--deep-yellow);
   height: 200vh;
   box-shadow: 0 0 0 4px var(--deep-red) inset,
     0 0 0 7px var(--deep-yellow) inset;
-}
-h1 {
-  font-size: 3rem;
-  text-align: center;
-  margin: 5px;
-  color: var(--deep-red);
-  text-shadow: 2px 2px 0 white;
-}
-
-/* suggestions and button styles */
-.player-name-input-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
 }
 header {
   width: 95vw;
@@ -42,18 +25,31 @@ header {
   margin-bottom: 25px;
   margin-top: 25px;
   border-radius: 10px;
-  /* box-shadow: 0 0 0 4px var(--deep-red), 0 0 0 7px var(--deep-yellow); */
+}
+h1 {
+  margin: 5px;
+  font-size: 3rem;
+  text-align: center;
+  color: var(--deep-red);
+  text-shadow: 2px 2px 0 white;
+}
+
+/* suggestions and button styles */
+.player-name-input-wrapper {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
 }
 .suggestions-list {
-  width: 100%;
   list-style: none;
+  width: 100%;
   margin-top: 6px;
   border-radius: 8px;
   box-shadow: 0 5px 10px #4a494933;
   max-height: 120px;
   overflow: auto;
-  position: relative;
-  z-index: 1;
 }
 .suggestions-list li {
   padding: 12px;
@@ -73,10 +69,10 @@ header {
   padding: 1rem;
   font-size: 1.5rem;
   background-color: var(--deep-red);
+  color: var(--deep-yellow);
   border-radius: 20px;
   align-self: flex-start;
   transform: translateY(10px);
-  color: var(--deep-yellow);
 }
 .player-name-input-wrapper button:hover {
   background-color: var(--deep-yellow);

@@ -23,6 +23,7 @@ const headingWrapper = document.querySelector(".header");
 getStatsButton.addEventListener("click", () => {
   gamesWrapper.innerHTML = "";
   headingWrapper.innerHTML = "";
+  canFetch = true;
   appendGames();
 });
 gamesWrapper.addEventListener("scroll", handleScroll);
@@ -91,6 +92,7 @@ async function fetchPlayerNameByID(id) {
     console.log(`filter error: ${error}`);
   }
 }
+
 function createSuggestionElement(suggestion) {
   const li = document.createElement("li");
   li.textContent = suggestion;
@@ -100,6 +102,7 @@ function createSuggestionElement(suggestion) {
   });
   return li;
 }
+
 function clearSuggestions() {
   clearTimeout(timeoutID);
   suggestionsList.innerHTML = "";
@@ -162,7 +165,7 @@ async function appendStats() {
   const input = playerNameInput.value;
   if ((await validateInput(input)) === false) return;
 
-  displaySeasonStats();
+  seasonStatsWrapper.style.display = "flex";
 
   const player = await getPlayersByName(input);
   const { name: playerName, id: playerID } = player[0];
@@ -205,11 +208,16 @@ async function appendStats() {
 
 // APPEND SEASON STATS
 
-/* <div class="game">
-    <h4>Lebron James</h4>
-    <h5>Lakers vs Warriors</h5>
-    <p><b>30</b> Points <b>30</b> Rebounds <b>30</b> Assists <b>30</b> Steals <b>30</b> Blocks</p>
-  </div> */
+function handleScroll() {
+  console.log("scroll detected");
+  if (!canFetch) return;
+  const spaceLeftAtBottom =
+    this.scrollHeight - this.scrollTop - this.clientHeight;
+  console.log(spaceLeftAtBottom);
+  if (spaceLeftAtBottom > 0) return;
+  page += 1;
+  appendGames();
+}
 
 async function appendGames() {
   const gamesSeason = season.value;
@@ -251,14 +259,6 @@ async function fetchAllGamesBySeason(playerID, currentSeason, page = 1) {
     console.error("error alert" + error);
   }
 }
-function handleScroll() {
-  if (!canFetch) return;
-  const spaceLeftAtBottom =
-    this.scrollHeight - this.scrollTop - this.clientHeight;
-  if (spaceLeftAtBottom > 0) return;
-  page += 1;
-  appendGames();
-}
 function createUrl(playerID, currentSeason, page) {
   const url = new URL(ALL_SEASON_STATS_BASE_URL);
   url.searchParams.set("player_ids[]", playerID);
@@ -266,9 +266,7 @@ function createUrl(playerID, currentSeason, page) {
   url.searchParams.set("page", page);
   return url;
 }
-// const { data: games, meta } = await fetchAllGamesBySeason(237, 2021);
-// console.log(games[0]);
-// console.log(meta);
+
 function createGameElement(game, teams) {
   const gameWrapper = document.createElement("div");
   gameWrapper.classList.add("game");
@@ -287,6 +285,7 @@ function createGameElement(game, teams) {
   gameWrapper.appendChild(statsDisplay);
   return gameWrapper;
 }
+
 async function getAllTeams() {
   try {
     const response = await fetch(TEAMS_BASE_URL);
@@ -298,13 +297,9 @@ async function getAllTeams() {
     console.log(error);
   }
 }
-const teameroor = await getAllTeams();
-console.log(teameroor);
+
 function hideSeasonAndResetStats() {
   seasonStatsWrapper.style.display = "none";
   gamesWrapper.innerHTML = "";
   headingWrapper.innerHTML = "";
-}
-function displaySeasonStats() {
-  seasonStatsWrapper.style.display = "flex";
 }
