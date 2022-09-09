@@ -20,31 +20,38 @@ const gamesWrapper = document.querySelector(".scrollable-wrapper");
 const seasonStatsWrapper = document.querySelector(".season-stats-wrapper");
 const headingWrapper = document.querySelector(".header");
 
+// EVENT LISTENERS
+playerNameInput.addEventListener("input", () => {
+  buttonAndPageReset();
+  onType();
+});
+
+season.addEventListener("change", buttonAndPageReset);
+
+getAvgsButton.addEventListener("click", () => {
+  if (playerNameInput.value.length < 3) return;
+  appendStats();
+});
+
 getStatsButton.addEventListener("click", () => {
   gamesWrapper.innerHTML = "";
   headingWrapper.innerHTML = "";
   canFetch = true;
   appendGames();
 });
+
 gamesWrapper.addEventListener("scroll", handleScroll);
-season.addEventListener("change", () => {
-  getAvgsButton.disabled = false;
-  getAvgsButton.style.filter = "brightness(100%)";
-  page = 1;
-  hideSeasonAndResetStats();
-});
-getAvgsButton.addEventListener("click", () => {
-  appendStats();
-});
 
 // SUGGESTIONS LIST
-playerNameInput.addEventListener("input", () => {
+
+function buttonAndPageReset() {
   getAvgsButton.disabled = false;
   getAvgsButton.style.filter = "brightness(100%)";
   page = 1;
-  onType();
-  hideSeasonAndResetStats();
-});
+  seasonStatsWrapper.style.display = "none";
+  gamesWrapper.innerHTML = "";
+  headingWrapper.innerHTML = "";
+}
 
 function onType() {
   if (playerNameInput.value.length < 3) {
@@ -207,14 +214,13 @@ async function appendStats() {
 }
 
 // APPEND SEASON STATS
-
 function handleScroll() {
-  console.log("scroll detected");
   if (!canFetch) return;
+
   const spaceLeftAtBottom =
     this.scrollHeight - this.scrollTop - this.clientHeight;
-  console.log(spaceLeftAtBottom);
-  if (spaceLeftAtBottom > 0) return;
+  if (spaceLeftAtBottom > 1) return;
+
   page += 1;
   appendGames();
 }
@@ -226,15 +232,20 @@ async function appendGames() {
     gamesSeason,
     page
   );
+
   if (meta.next_page == null) canFetch = false;
+
   const teams = await getAllTeams();
   const playerName = playerNameInput.value;
+
   if (headingWrapper.hasChildNodes() === false) {
     const playerHeader = document.createElement("h4");
     playerHeader.textContent = `${playerName} ${gamesSeason} Season Stats`;
     headingWrapper.appendChild(playerHeader);
   }
+
   const fragment = document.createDocumentFragment();
+
   games.forEach((game) => {
     if (
       game.pts == null ||
@@ -246,11 +257,13 @@ async function appendGames() {
       return;
     fragment.appendChild(createGameElement(game, teams));
   });
+
   gamesWrapper.appendChild(fragment);
 }
 
 async function fetchAllGamesBySeason(playerID, currentSeason, page = 1) {
   const url = createUrl(playerID, currentSeason, page);
+
   try {
     const response = await fetch(url);
     const allGames = await response.json();
@@ -259,6 +272,7 @@ async function fetchAllGamesBySeason(playerID, currentSeason, page = 1) {
     console.error("error alert" + error);
   }
 }
+
 function createUrl(playerID, currentSeason, page) {
   const url = new URL(ALL_SEASON_STATS_BASE_URL);
   url.searchParams.set("player_ids[]", playerID);
@@ -270,8 +284,8 @@ function createUrl(playerID, currentSeason, page) {
 function createGameElement(game, teams) {
   const gameWrapper = document.createElement("div");
   gameWrapper.classList.add("game");
-  const versusHeading = document.createElement("h5");
 
+  const versusHeading = document.createElement("h5");
   versusHeading.textContent = `${
     game.game.home_team_id === game.team.id ? "VS" : "@"
   } ${
@@ -279,8 +293,10 @@ function createGameElement(game, teams) {
       ? teams[game.game.visitor_team_id - 1]
       : teams[game.game.home_team_id - 1]
   }`;
+
   const statsDisplay = document.createElement("p");
   statsDisplay.innerHTML = `<b>${game.pts}</b> Points <b>${game.reb}</b> Rebounds <b>${game.ast}</b> Assists <b>${game.stl}</b> Steals <b>${game.blk}</b> Blocks`;
+
   gameWrapper.appendChild(versusHeading);
   gameWrapper.appendChild(statsDisplay);
   return gameWrapper;
@@ -296,10 +312,4 @@ async function getAllTeams() {
   } catch (error) {
     console.log(error);
   }
-}
-
-function hideSeasonAndResetStats() {
-  seasonStatsWrapper.style.display = "none";
-  gamesWrapper.innerHTML = "";
-  headingWrapper.innerHTML = "";
 }
